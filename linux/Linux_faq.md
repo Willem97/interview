@@ -5,7 +5,7 @@
 
 ## 进程间通信
 
-IPC inter-process communication，进程间通信，常用的有
+`IPC inter-process communication`，进程间通信，常用的有
 
     - 信号量
     - 共享内存
@@ -13,6 +13,7 @@ IPC inter-process communication，进程间通信，常用的有
 
 ## 多路复用IO
 
-    一个线程的IO多路复用，典型就是redis和Nodejs，根本不需要切换上下文，一个线程走天下
-    
-    多个线程的IO多路复用，就是Golang协程的实现方式了，协程：自己管理线程，把线程控制到一定的数量，然后构造一个规则状态机来调度任务。
+- 一个线程的IO多路复用，典型就是redis和Nodejs，根本不需要切换上下文，一个线程走天下
+
+- 多个线程的IO多路复用，就是Golang协程的实现方式了，协程：自己管理线程，把线程控制到一定的数量，然后构造一个规则状态机来调度任务。
+

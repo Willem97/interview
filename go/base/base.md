@@ -7,6 +7,11 @@
     - [2.3. 参考链接](#23-参考链接)
 - [3.defer语句](#3defer语句)
     - [3.1. 多个defer语句执行顺序：](#31-多个defer语句执行顺序)
+    - [3.2. defer与return谁先谁后](#32-defer与return谁先谁后)
+    - [3.3. 函数的返回值初始化](#33-函数的返回值初始化)
+- [4.make和new](#4make和new)
+    - [4.1. new](#41-new)
+    - [4.2. make](#42-make)
 
 <!-- /TOC -->
 
@@ -93,4 +98,50 @@ testProj go tool compile -S internal/test1/main.go | grep newobject
 # 3.defer语句
 
 ## 3.1. 多个defer语句执行顺序：
-    在defer语句每次执行的时候，Go语言会把它携带的defer函数及其参数值另行存储到一个队列中。这个队列与该defer语句所属的函数是对应的，并且，它是先进后出（FILO）的，相当于一个栈。即**defer函数调用与其所属的defer语句的执行顺序完全相反**。
+    
+在defer语句每次执行的时候，Go语言会把它携带的defer函数及其参数值另行存储到一个队列中。这个队列与该defer语句所属的函数是对应的，并且，它是先进后出（FILO）的，相当于一个栈。即**defer函数调用与其所属的defer语句的执行顺序完全相反**。
+
+## 3.2. defer与return谁先谁后
+
+return之后的语句先执行，defer后的的语句后执行
+
+## 3.3. 函数的返回值初始化
+
+```go
+package main
+
+import "fmt"
+
+func DeferFunc1(i int) (t int) {
+    fmt.Println("t = ", t)
+    return 2
+}
+
+func main() {
+    DeferFunc1()
+}
+```
+
+```bash
+# 运行结果
+t = 0
+```
+
+只要声明函数的返回值变量名称，就会在函数初始化时候为之赋值为0，而且在函数体作用域可见。
+
+# 4.make和new
+
+## 4.1. new
+
+```go
+func new(Type) *Type
+```
+
+`new` 只接收一个参数，这个参数是一个类型，分配好内存后，返回一个指向该类型内存地址的指针。返回的永远是类型的指针，指向分配类型的内存地址。
+## 4.2. make
+
+```go
+func make(t Type, size ...IntegerType) Type
+```
+
+`make` 用于分配内存，只用于 `chan`, `map`, `slice` 的内存创建，而且它返回的类型就是这三个类型的本身，而不是它们的指针类型，因为这三种类型是引用类型，没必要返回它们的指针了。
